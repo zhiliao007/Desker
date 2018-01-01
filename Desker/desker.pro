@@ -15,8 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    windows_api.h
 
 FORMS    += mainwindow.ui
 
-RESOURCES +=
+RESOURCES += \
+    images.qrc
+
+DISTFILES +=
