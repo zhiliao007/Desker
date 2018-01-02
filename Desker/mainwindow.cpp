@@ -29,9 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowFlags(Qt::FramelessWindowHint); //去掉标题栏的显示
-    //this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
+    this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
     this->showMaximized();
+    setAttribute(Qt::WA_DeleteOnClose);
 
     //调用样式表修改背景函数（废弃，改用重写paintEvent()事件绘制背景）
     //this->setStyleSheet("background-image:url("+paths+");");
@@ -56,7 +56,7 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
     QIcon icoExit(":/images/images/exit.png");
     pExit->setIcon(icoExit);
     menu->addAction(pExit);
-    connect(pExit,SIGNAL(triggered()),this,SLOT(close()));
+    connect(pExit,SIGNAL(triggered()),qApp, SLOT(quit()));  //直接退出程序
 
     QAction *pSet = new QAction("设置中心",this);
     //QIcon icoSet(":/images/images/set.png");
