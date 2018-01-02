@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
     this->showMaximized();
-    setAttribute(Qt::WA_DeleteOnClose);
+    //setAttribute(Qt::WA_DeleteOnClose);
 
     //调用样式表修改背景函数（废弃，改用重写paintEvent()事件绘制背景）
     //this->setStyleSheet("background-image:url("+paths+");");
