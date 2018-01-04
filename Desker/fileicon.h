@@ -24,6 +24,8 @@ public:
     FileIcon();
     QIcon fileExtensionIcon (const QString extension) const ;
     QString fileExtensionType(const QString & extension) const ;
+    QPixmap getIcon(QString filename);
+    bool pixmapIsOnly48Bit(QPixmap pixmap);
 };
 
 #endif // FILEICON_H

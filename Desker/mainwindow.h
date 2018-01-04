@@ -30,6 +30,7 @@ public:
     ~MainWindow();
     void contextMenuEvent(QContextMenuEvent *event);
     void paintEvent(QPaintEvent *event);
+
 private:
     Ui::MainWindow *ui;
 };
