@@ -18,6 +18,7 @@
 #include <QIcon>
 #include <QPainter>
 #include <QDebug>
+#include <QtWin>
 
 #include "windows_api.h"
 #include "mainwindow.h"
@@ -31,15 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
     this->showMaximized();
-    //setAttribute(Qt::WA_DeleteOnClose);
 
-    //调用样式表修改背景函数（废弃，改用重写paintEvent()事件绘制背景）
-    //this->setStyleSheet("background-image:url("+paths+");");
+    ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
+{
+    // ExtractIconEx 从限定的可执行文件、动态链接库（DLL）、或者图标文件中生成图标句柄数组
+    const UINT iconCount = ExtractIconEx((wchar_t *)sourceFile.utf16(), -1, 0, 0, 0);
+    if (!iconCount) {
+        qDebug() << QString("%1 does not appear to contain icons.").arg(sourceFile);
+    }
+
+    QScopedArrayPointer<HICON> icons(new HICON[iconCount]);
+
+    if(sizeFlag){
+        if(!ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, icons.data(), 0, iconCount))
+            ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, 0, icons.data(), iconCount);
+    }
+    else
+        ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, 0, icons.data(), iconCount);
+
+    return QtWin::fromHICON(icons[0]);
 }
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
