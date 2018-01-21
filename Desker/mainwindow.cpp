@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QtWin>
 
+
 #include "windows_api.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -34,7 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->showMaximized();
 
     ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
-}
+
+   }
 
 MainWindow::~MainWindow()
 {
@@ -91,6 +93,25 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
     menu->move(cursor().pos());
     menu->show();
+}
+
+//重写鼠标双击事件
+void MainWindow::mouseDoubleClickEvent(QMouseEvent*event)
+{//如果鼠标按下的是左键
+    if(event->buttons()==Qt::LeftButton)
+    {//如果lable为显示，将label设置为隐藏
+        if(ui->label->isVisible())
+        {
+            ui->label->setVisible(false);
+            ui->label_2->setVisible(false);
+        }
+        else
+        {
+            ui->label->setVisible(true);
+            ui->label_2->setVisible(true);
+        }
+    }
+
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

@@ -17,6 +17,8 @@
 
 #include <QMainWindow>
 
+#include<QMouseEvent>
+
 namespace Ui {
 class MainWindow;
 }
@@ -32,8 +34,12 @@ public:
     void contextMenuEvent(QContextMenuEvent *event);
     void paintEvent(QPaintEvent *event);
 
+
 private:
     Ui::MainWindow *ui;
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent*event);//双击
 };
 
 #endif // MAINWINDOW_H
