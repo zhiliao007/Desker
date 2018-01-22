@@ -20,10 +20,12 @@
 #include <QDebug>
 #include <QtWin>
 
+#include <QDesktopServices>
 
 #include "windows_api.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,15 +35,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
     this->showMaximized();
-
-    ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
-
+    //提取桌面路径某图标，支持中文名称
+    QString Path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    ui->label->setPixmap(getIcon(Path+"//图像.exe",true));
+  // ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
    }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 
 QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
 {
@@ -61,7 +65,10 @@ QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
         ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, 0, icons.data(), iconCount);
 
     return QtWin::fromHICON(icons[0]);
+
+
 }
+
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {

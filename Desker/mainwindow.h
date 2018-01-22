@@ -31,9 +31,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     QPixmap getIcon(const QString sourceFile, bool sizeFlag);
+   // QString getIcon(const QString sourceFile, bool sizeFlag);
     void contextMenuEvent(QContextMenuEvent *event);
     void paintEvent(QPaintEvent *event);
-
 
 private:
     Ui::MainWindow *ui;

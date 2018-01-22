@@ -16,7 +16,6 @@
 #define WINDOWS_API_H
 
 #include <windows.h>
-
 #ifdef UNICODE
 #define QStringToTCHAR(x)     (wchar_t*) x.utf16()
 #define PQStringToTCHAR(x)    (wchar_t*) x->utf16()
