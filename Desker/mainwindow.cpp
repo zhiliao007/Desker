@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//去掉任务栏和标题栏的最大化显示
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
     this->showMaximized();
-<<<<<<< HEAD
+
 
     ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
 
@@ -50,14 +50,14 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << QString("%1").arg(fileInfo.fileName());
     }
     qDebug() << QString("%1").arg(list.size());
-}
-=======
+
+
     //提取桌面路径某图标，支持中文名称
     QString Path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     ui->label->setPixmap(getIcon(Path+"//图像.exe",true));
-  // ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
-   }
->>>>>>> 82732e972eb8cf043feb99c5ae2d8730cb61146d
+    //ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
+}
+
 
 MainWindow::~MainWindow()
 {
