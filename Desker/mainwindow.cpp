@@ -19,6 +19,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QtWin>
+#include <QDir>
 
 #include "windows_api.h"
 #include "mainwindow.h"
@@ -30,10 +31,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);//去掉任务栏和标题栏的显示
+	//去掉任务栏和标题栏的最大化显示
+    this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
     this->showMaximized();
 
     ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
+
+    QDir dir("C:\\Users\\qq_xi\\Desktop");
+    dir.setFilter(QDir::Files | QDir::Executable);
+    dir.setSorting(QDir::Name);
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.size(); ++i) {
+        QFileInfo fileInfo = list.at(i);
+        qDebug() << QString("%1").arg(fileInfo.fileName());
+    }
+    qDebug() << QString("%1").arg(list.size());
 }
 
 MainWindow::~MainWindow()

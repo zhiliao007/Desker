@@ -34,7 +34,11 @@ QIcon FileIcon::fileExtensionIcon (const QString extension) const
 {
     QFileIconProvider icon_provider;
     QIcon icon;
-    QTemporaryFile tmp_file(QDir::tempPath() + QDir::separator() + QCoreApplication::applicationName() + "_XXXXXX" + extension);
+    QTemporaryFile tmp_file(QDir::tempPath() + 
+							QDir::separator() + 
+							QCoreApplication::applicationName() + 
+							"_XXXXXX" + 
+							extension);
     tmp_file.setAutoRemove(false);
 
     if(tmp_file.open())
@@ -48,7 +52,8 @@ QIcon FileIcon::fileExtensionIcon (const QString extension) const
     }
     else
     {
-        qCritical()<<QString("failed to write temporary file %1").arg(tmp_file.fileName());
+        qCritical()<<QString("failed to write temporary file %1")
+													.arg(tmp_file.fileName());
     }
 
     return icon;
@@ -58,7 +63,11 @@ QString FileIcon::fileExtensionType(const QString & extension) const
 {
     QFileIconProvider icon_provider;
     QString type;
-    QTemporaryFile tmp_file(QDir::tempPath() + QDir::separator() + QCoreApplication::applicationName() + "_XXXXXX" + extension);
+    QTemporaryFile tmp_file(QDir::tempPath() + 
+							QDir::separator() + 
+							QCoreApplication::applicationName() + 
+							"_XXXXXX" + 
+							extension);
     tmp_file.setAutoRemove(false);
 
     if(tmp_file.open())
@@ -73,7 +82,8 @@ QString FileIcon::fileExtensionType(const QString & extension) const
     }
     else
     {
-        qCritical()<<QString("failed to write temporary file %1") .arg(tmp_file.fileName());
+        qCritical()<<QString("failed to write temporary file %1")
+													.arg(tmp_file.fileName());
     }
 
     return type;
