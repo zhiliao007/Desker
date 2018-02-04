@@ -17,6 +17,8 @@
 
 #include <QMainWindow>
 
+#include<QMouseEvent>
+
 namespace Ui {
 class MainWindow;
 }
@@ -29,11 +31,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     QPixmap getIcon(const QString sourceFile, bool sizeFlag);
+   // QString getIcon(const QString sourceFile, bool sizeFlag);
     void contextMenuEvent(QContextMenuEvent *event);
     void paintEvent(QPaintEvent *event);
 
 private:
     Ui::MainWindow *ui;
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent*event);//双击
 };
 
 #endif // MAINWINDOW_H

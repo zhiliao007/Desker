@@ -21,9 +21,12 @@
 #include <QtWin>
 #include <QDir>
 
+#include <QDesktopServices>
+
 #include "windows_api.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//去掉任务栏和标题栏的最大化显示
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
     this->showMaximized();
+<<<<<<< HEAD
 
     ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
 
@@ -47,11 +51,19 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     qDebug() << QString("%1").arg(list.size());
 }
+=======
+    //提取桌面路径某图标，支持中文名称
+    QString Path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    ui->label->setPixmap(getIcon(Path+"//图像.exe",true));
+  // ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
+   }
+>>>>>>> 82732e972eb8cf043feb99c5ae2d8730cb61146d
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 
 QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
 {
@@ -71,7 +83,10 @@ QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
         ExtractIconEx((wchar_t *)sourceFile.utf16(), 0, 0, icons.data(), iconCount);
 
     return QtWin::fromHICON(icons[0]);
+
+
 }
+
 
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -103,6 +118,25 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
     menu->move(cursor().pos());
     menu->show();
+}
+
+//重写鼠标双击事件
+void MainWindow::mouseDoubleClickEvent(QMouseEvent*event)
+{//如果鼠标按下的是左键
+    if(event->buttons()==Qt::LeftButton)
+    {//如果lable为显示，将label设置为隐藏
+        if(ui->label->isVisible())
+        {
+            ui->label->setVisible(false);
+            ui->label_2->setVisible(false);
+        }
+        else
+        {
+            ui->label->setVisible(true);
+            ui->label_2->setVisible(true);
+        }
+    }
+
 }
 
 void MainWindow::paintEvent(QPaintEvent *event)

@@ -8,6 +8,8 @@ QT       += core gui
 QT       += winextras
 LIBS     += -lshell32
 
+QT += winextras
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = desker
