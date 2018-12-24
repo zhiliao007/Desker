@@ -5,10 +5,11 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT       += winextras
-LIBS     += -lshell32
 
-QT += winextras
+if(contains(DEFINES,Q_OS_WIN)){
+    QT       += winextras
+    LIBS     += -lshell32
+}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

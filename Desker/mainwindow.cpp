@@ -18,14 +18,19 @@
 #include <QIcon>
 #include <QPainter>
 #include <QDebug>
-#include <QtWin>
 #include <QDir>
-
 #include <QDesktopServices>
-
-#include "windows_api.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#if defined(Q_OS_WIN)
+#include <QtWin>
+#include "windows_api.h"
+#endif
+
+#if defined(Q_OS_LINUX)
+
+#endif
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -38,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowFlags(Qt::SubWindow | Qt::FramelessWindowHint);
     this->showMaximized();
 
-
+#if defined(Q_OS_WIN)
     ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
 
     QDir dir("C:\\Users\\qq_xi\\Desktop");
@@ -56,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QString Path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     ui->label->setPixmap(getIcon(Path+"//图像.exe",true));
     //ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
+#endif
 }
 
 
@@ -67,6 +73,7 @@ MainWindow::~MainWindow()
 
 QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
 {
+#if defined(Q_OS_WIN)
     // ExtractIconEx 从限定的可执行文件、动态链接库（DLL）、或者图标文件中生成图标句柄数组
     const UINT iconCount = ExtractIconEx((wchar_t *)sourceFile.utf16(), -1, 0, 0, 0);
     if (!iconCount) {
@@ -84,7 +91,7 @@ QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
 
     return QtWin::fromHICON(icons[0]);
 
-
+#endif
 }
 
 
@@ -143,11 +150,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
 {
    QPainter painter(this);
 
+#if defined(Q_OS_WIN)
    //调用windows API获取桌面壁纸路径
    TCHAR chPath[MAX_PATH];
    SystemParametersInfo(SPI_GETDESKWALLPAPER,MAX_PATH,chPath,0);
    QString path = TCHARToQString(chPath);
    QString paths = path.replace(QRegExp("\\\\"), "/");
+#elif defined(Q_OS_LINUX)
+    QString paths = "/home/xiaoming/Pictures/code-wallpaper-16.jpg";
+#endif
+
 #ifdef QT_NO_DEBUG
 
 #else

@@ -17,13 +17,23 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
-
 #include <QLibrary>
-#include <QtWin>
 #include <QMessageBox>
-
-#include "windows_api.h"
 #include "fileicon.h"
+
+#if defined(Q_OS_WIN)
+#include <QtWin>
+#include "windows_api.h"
+#endif
+
+#if defined(Q_OS_LINUX)
+
+#endif
+
+
+#if defined(Q_OS_WIN)
+typedef HICON (*CYCGetIcon)(CONST TCHAR *, CONST INT);
+#endif
 
 FileIcon::FileIcon()
 {
@@ -90,9 +100,9 @@ QString FileIcon::fileExtensionType(const QString & extension) const
 }
 
 
-typedef HICON (*CYCGetIcon)(CONST TCHAR *, CONST INT);
 QPixmap FileIcon::getIcon(QString filename)
 {
+#if defined(Q_OS_WIN)
     QLibrary mylib("getIcon.dll");
     HICON hIcon;
     QPixmap pixmap;
@@ -118,6 +128,7 @@ QPixmap FileIcon::getIcon(QString filename)
     }
     QMessageBox::information(NULL,"NO","Cannot load 'getIcon.dll' correctly!");
     return QPixmap(":/pic/chilun.png");
+#endif
 }
 
 bool FileIcon::pixmapIsOnly48Bit(QPixmap pixmap)
