@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QDesktopServices>
+#include <QStringList>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -29,7 +31,7 @@
 #endif
 
 #if defined(Q_OS_LINUX)
-
+#include <QProcess>
 #endif
 
 
@@ -62,6 +64,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label->setPixmap(getIcon(Path+"//图像.exe",true));
     //ui->label->setPixmap(getIcon("D:\\Program Files (x86)\\Arduino\\arduino.exe",true));
 #endif
+#if defined(Q_OS_LINUX)
+    QString desktop_path = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    qDebug() << desktop_path;
+    ui->label->setAlignment(Qt::AlignCenter);
+    ui->label->setPixmap(getIcon(desktop_path+"/Visual Studio Code",true).scaled(QSize(48, 48), Qt::KeepAspectRatio));
+    ui->label_2->setText("Visual Studio Code");
+    //ui->label_2->setStyleSheet("text-align:center;background-color:#FFFFFF;color:black");
+    ui->label_2->setStyleSheet("text-align:center;background:transparent;color:white");
+#endif
 }
 
 
@@ -91,6 +102,9 @@ QPixmap MainWindow::getIcon(const QString sourceFile, bool sizeFlag)
 
     return QtWin::fromHICON(icons[0]);
 
+#endif
+#if defined(Q_OS_LINUX)
+    return QPixmap("/snap/vscode/72/usr/share/pixmaps/code.png");
 #endif
 }
 
@@ -148,6 +162,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent*event)
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+   QString paths = NULL;
    QPainter painter(this);
 
 #if defined(Q_OS_WIN)
@@ -155,18 +170,32 @@ void MainWindow::paintEvent(QPaintEvent *event)
    TCHAR chPath[MAX_PATH];
    SystemParametersInfo(SPI_GETDESKWALLPAPER,MAX_PATH,chPath,0);
    QString path = TCHARToQString(chPath);
-   QString paths = path.replace(QRegExp("\\\\"), "/");
+   paths = path.replace(QRegExp("\\\\"), "/");
 #elif defined(Q_OS_LINUX)
-    QString paths = "/home/xiaoming/Pictures/code-wallpaper-16.jpg";
+    QProcess process;
+    /* gnome*/
+    //process.start("gsettings", QStringList()<<"get"<<"org.gnome.desktop.background"<<"picture-uri");
+    /* mate */
+    process.start("gsettings", QStringList()<<"get"<<"org.mate.background"<<"picture-filename");
+    if (process.waitForStarted(-1)) {
+        while(process.waitForReadyRead(-1)) {
+            //qDebug() << "readAllStandardOutput:" << process.readAllStandardOutput();
+            QString path = QString::fromLocal8Bit(process.readAllStandardOutput());
+            path = path.replace(QRegExp("\'"), "");
+            paths = path.replace(QRegExp("\n"), "");
+        }
+    }
 #endif
 
 #ifdef QT_NO_DEBUG
 
 #else
-    qDebug() << paths;
+    qDebug() << "paths addr:" << paths;
 #endif //QT_NO_DEBUG
 
    painter.drawPixmap(0,0,width(),height(),QPixmap(paths));
 }
+
+
 
 /************** (C) COPYRIGHT 2014-2018 学生开放实验室 *****END OF FILE*********/
